@@ -1,5 +1,7 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 abstract class AppConstants {
   AppConstants._();
-  static const String baseUrl = 'https://api.weatherapi.com/v1/forecast.json';
-  static const String apiKey = '976085ed68464f0c84b194704250509';
+  static String get baseUrl => dotenv.env['BASE_URL'] ?? '';
+  static String get apiKey => dotenv.env['API_KEY'] ?? '';
 }
