@@ -5,7 +5,7 @@ import '../constants/app_constants.dart';
 import '../models/weather_model.dart';
 
 class WeatherService {
-  // Initialize Dio instance (you can also configure a base options instance globally)
+  // Initialize Dio instance
   final Dio _dio = Dio();
 
   Future<WeatherModel> getForecast(String city, int days) async {
@@ -24,14 +24,12 @@ class WeatherService {
 
       final dynamic jsonData = response.data;
 
-      // Log status + body for debugging
       debugPrint('WeatherService.getForecast -> status=${response.statusCode}');
       final bodyStr = jsonData.toString();
       debugPrint(
         'WeatherService.getForecast -> body=${bodyStr.length > 1000 ? "${bodyStr.substring(0, 1000)}.,,(truncated)" : bodyStr}',
       );
 
-      // Defensive checks and clearer error messages
       if (jsonData == null) {
         throw ApiException('Invalid server response (empty).');
       }
@@ -53,7 +51,6 @@ class WeatherService {
         throw ApiException('Failed to parse weather data.');
       }
     } on DioException catch (e) {
-      // Handle Dio-specific errors (network failures, bad status codes, timeouts)
       if (e.response != null) {
         final responseData = e.response?.data;
         final shortBody = responseData != null ? responseData.toString() : '';
@@ -65,11 +62,9 @@ class WeatherService {
           'Request failed (status ${e.response?.statusCode}). $truncatedBody',
         );
       } else {
-        // Connection errors, timeouts, etc.
         throw ApiException('Network error: ${e.message}');
       }
     } catch (e) {
-      // Re-throw if it's already an ApiException
       if (e is ApiException) rethrow;
       throw ApiException('Unexpected error occurred: $e');
     }

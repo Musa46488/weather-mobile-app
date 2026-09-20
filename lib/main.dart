@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'src/cubit/forecast_toggle/forecast_toggle_cubit.dart';
 
 import 'src/cubit/weather/weather_cubit.dart';
@@ -7,7 +8,11 @@ import 'src/repository/weather_repository.dart';
 import 'src/service/weather_service.dart';
 import 'src/view/home_view.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await dotenv.load(fileName: '.env');
+
   runApp(const MyApp());
 }
 
